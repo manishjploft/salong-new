@@ -147,11 +147,11 @@ const SearchModal = ({ isOpenSearch, searchOff }: any) => {
                     <ul className="space-y-2">
                       {filteredBrands.map((item: any, index: number) => (
                         <li key={index}>
-                          <Link href={`/merke/${item.slug}`} onClick={closeModal}>
+                          <a href={`/merke/${item.slug}`} onClick={closeModal}>
                             <p className="text-sm text-primary cursor-pointer hover:underline">
                               {item.brand_name}
                             </p>
-                          </Link>
+                          </a>
                         </li>
                       ))}
                     </ul>
@@ -165,11 +165,11 @@ const SearchModal = ({ isOpenSearch, searchOff }: any) => {
                     <ul className="space-y-2">
                       {filteredCategories.map((category: any, index: number) => (
                         <li key={index}>
-                          <Link href={`/kategori/${category.slug}`} onClick={closeModal}>
+                          <a href={`/kategori/${category.slug}`} onClick={closeModal}>
                             <p className="text-sm text-primary cursor-pointer hover:underline">
                               {category.category_name}
                             </p>
-                          </Link>
+                          </a>
                         </li>
                       ))}
                     </ul>
