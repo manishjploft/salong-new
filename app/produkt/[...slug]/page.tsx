@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: { params: { slug: string[] } 
 export default async function ProductPage({ params }: { params: { slug: string[] } }) {
   const { slug } = params;
   // const cartItem = await fetchCartItems();
-  // const customerGroups = await fetchCustomerGroup();
+  const customerGroups = await fetchCustomerGroup();
   const products = await fetchProductDetail(slug);
   console.log("productttttt", products);
   
@@ -127,11 +127,11 @@ export default async function ProductPage({ params }: { params: { slug: string[]
                 <h2 className="font-heading font-light text-2xl sm:text-2xl md:text-3xl lg:text-5xl mb-8 max-w-2xl">
                   {products.product_name}
                 </h2>
-                {/* <ProductDetailPrice
+                <ProductDetailPrice
                   initialVariant={products?.variants?.length > 0 ? products?.variants[0] : null}
                   detail={products}
                   customerGroups={customerGroups}
-                /> */}
+                />
 
                 {products?.variants?.length > 0 &&
                   <div className="flex flex-wrap gap-6 items-center mb-8">
