@@ -19,35 +19,22 @@ export async function fetchFeaturedCategories() {
 
 export async function fetchProductPageTopMenu(
   brand: any = null,
-  category: any = null,
-  categoryIdFilters: any = null,
-  subCategoryIdFilters: any = null
+  category: any = null
 ) {
   try {
+
     let url = process.env.NEXT_PUBLIC_API_URL + "product-top-menu?";
 
     // Append category as a query parameter if provided
-    if (categoryIdFilters) {
-      const mainCategory = categoryIdFilters; // Get the first part before the comma
-      url += `&mainCategory=${mainCategory}`;
-    }
-
     if (category) {
       const firstCategory = category; // Get the first part before the comma
       url += `&category=${firstCategory}`;
-    }
-
-    if (subCategoryIdFilters) {
-      const subCategory = subCategoryIdFilters; // Get the first part before the comma
-      url += `&subCategory=${subCategory}`;
     }
 
     // Append category as a query parameter if provided
     if (brand) {
       url += `&brand=${brand}`;
     }
-    console.log("url-new", url);
-    
     // Sending GET request using axios to fetch featured products
     const res = await axios.get(url);
 
@@ -65,8 +52,7 @@ export async function fetchProductPageTopMenuWithCategory(
   mainCategoryByGetCategory: null,
   mainCategory: any = null,
   subCategory: any = null,
-  childSubCategory: any = null,
-  categoryIdFilters: any = null
+  childSubCategory: any = null
 ) {
   try {
     let url =
@@ -99,72 +85,15 @@ export async function fetchProductPageTopMenuWithCategory(
     }
 
     // Append category as a query parameter if provided
-    if (categoryIdFilters) {
-      const firstCategory = categoryIdFilters; // Get the first part before the comma
-      url += `&mainCategoryId=${firstCategory}`;
-    }
-
-    // Append category as a query parameter if provided
     if (brand) {
       url += `&brand=${brand}`;
     }
-    console.log("category-top-menu-filter", url);
-    
+
     // Sending GET request using axios to fetch featured products
     const res = await axios.get(url);
 
     // Assuming the response data contains the list of featured products
     return res.data.data; // Return the data as it is from the API response
-  } catch (error) {
-    console.error("Error fetching featured products:", error);
-    return []; // Return an empty array in case of an error
-  }
-}
-
-export async function fetchProductPageTopMenuWithSubCategory(
-  mainCategory: any = null
-) {
-  try {
-    let url =
-      process.env.NEXT_PUBLIC_API_URL +
-      "ProductPageSubCategory?mainCategory=" +
-      mainCategory;
-
-    // // Append category as a query parameter if provided
-    // if (mainCategory) {
-    //   const firstCategory = mainCategory; // Get the first part before the comma
-    //   url += `&firstCategory=${firstCategory}`;
-    // }
-
-    // // Append category as a query parameter if provided
-    // if (subCategory) {
-    //   const secondCategory = subCategory; // Get the first part before the comma
-    //   url += `&secondCategory=${secondCategory}`;
-    // }
-
-    // // Append category as a query parameter if provided
-    // if (childSubCategory) {
-    //   const thirdCategory = childSubCategory; // Get the first part before the comma
-    //   url += `&thirdCategory=${thirdCategory}`;
-    // }
-
-    // // Append category as a query parameter if provided
-    // if (category) {
-    //   const firstCategory = category; // Get the first part before the comma
-    //   url += `&category=${firstCategory}`;
-    // }
-
-    // // Append category as a query parameter if provided
-    // if (brand) {
-    //   url += `&brand=${brand}`;
-    // }
-    console.log("subcategoryurl", url);
-    
-    // Sending GET request using axios to fetch featured products
-    const res = await axios.get(url);
-
-    // Assuming the response data contains the list of featured products
-    return res.data.data.categories || []; // Return the data as it is from the API response
   } catch (error) {
     console.error("Error fetching featured products:", error);
     return []; // Return an empty array in case of an error

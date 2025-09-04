@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import {
     calculateProductPrice,
     calculateProductPriceByShowPrice,
@@ -38,16 +38,12 @@ export default function ProductDetailPrice({
         selectedVariantRef.current = selectedVariant;
     }, [selectedVariant]);
 
-    const productPrice = selectedVariant
-        ? selectedVariant.price_inc_vat
-        : price_inc_vat;
-    const productVatrate = selectedVariant
-        ? selectedVariant.vatrate_percent
-        : vatrate_percent;
-
-    const productSpecialPrice = selectedVariant
-        ? selectedVariant.special_price
-        : special_price;
+    // Memoize product values to prevent unnecessary recalculations
+    const { productPrice, productVatrate, productSpecialPrice } = useMemo(() => ({
+        productPrice: selectedVariant ? selectedVariant.price_inc_vat : price_inc_vat,
+        productVatrate: selectedVariant ? selectedVariant.vatrate_percent : vatrate_percent,
+        productSpecialPrice: selectedVariant ? selectedVariant.special_price : special_price,
+    }), [selectedVariant, price_inc_vat, vatrate_percent, special_price]);
 
 
     //new 

@@ -20,7 +20,6 @@ const ProductPage = ({
     const [filters, setFilters] = useState<string[]>(brandSlug === 'salg' || brandSlug === 'kategori' || brandSlug === 'merke' || brandSlug === 'alle produkter' || brandSlug === 'nyheter' ? [] : [brandSlugConvert]);
     const [brandFilters, setBrandFilters] = useState<string[]>(brandSlug === 'salg' || brandSlug === 'kategori' || brandSlug === 'merke' || brandSlug === 'alle produkter' || brandSlug === 'nyheter' ? [] : pageType === 'merke' ? [brandSlugConvert] : []);
     const [categoryFilters, setCategoryFilters] = useState<string[]>(brandSlug === 'salg' || brandSlug === 'kategori' || brandSlug === 'merke' || brandSlug === 'alle produkter' || brandSlug === 'nyheter' ? [] : pageType === 'kategori' ? [brandSlugConvert] : []);
-    const [subCategoryFilters, setSubCategoryFilters] = useState<string[]>([]);
     const [sizeFilters, setSizeFilters] = useState<string[]>([]);
     const [skinTypeFilters, setSkinTypeFilters] = useState<string[]>([]);
     const [colorFilters, setColorFilters] = useState<string[]>([]);
@@ -42,7 +41,7 @@ const ProductPage = ({
     const fetchFilteredProducts = async (page: number) => {
         setIsLoading(true);
 
-        const response = await fetchProducts(page, brandFilters, categoryFilters, sizeFilters, skinTypeFilters, colorFilters, type, '', brandSlug, subCategoryFilters); // Pass filters to fetchProducts
+        const response = await fetchProducts(page, brandFilters, categoryFilters, sizeFilters, skinTypeFilters, colorFilters, type, '', brandSlug); // Pass filters to fetchProducts
         console.log("response", response?.getBrand);
         
         setIsLoading(false);
@@ -54,7 +53,7 @@ const ProductPage = ({
 
     useEffect(() => {
         fetchFilteredProducts(1);
-    }, [brandFilters, categoryFilters, sizeFilters, skinTypeFilters, colorFilters, subCategoryFilters]); // Re-fetch products when filters change
+    }, [brandFilters, categoryFilters, sizeFilters, skinTypeFilters, colorFilters]); // Re-fetch products when filters change
 
     const handleFiltersChange = (newFilters: string[]) => {
         setFilters(newFilters);
@@ -68,10 +67,6 @@ const ProductPage = ({
         setCategoryFilters(newFilters);
     };
 
-    const handleSubCategoryFiltersChange = (newFilters: string[]) => {
-        setSubCategoryFilters(newFilters);
-    }
- 
     const handleSizeFiltersChange = (newFilters: string[]) => {
         setSizeFilters(newFilters);
     };
@@ -111,7 +106,6 @@ const ProductPage = ({
                         onFiltersChange={handleFiltersChange} // Pass the handler
                         onBrandFiltersChange={handleBrandFiltersChange} // Pass the handler
                         onCategoryFiltersChange={handleCategoryFiltersChange} // Pass the handler
-                        onSubCategoryFiltersChange={handleSubCategoryFiltersChange} // Pass the handler
                         onSizeFilterChange={handleSizeFiltersChange} // Pass the handler
                         onSkinTypeFilterChange={handleSkinTypeFiltersChange} // Pass the handler
                         onColorFilterChange={handleColorFiltersChange} // Pass the handler

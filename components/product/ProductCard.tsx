@@ -215,7 +215,6 @@ export default function ProductCard({ cart, product, customerGroups }: any) {
           <Link href={`/produkt/${product.slug}`} className="w-full">
             <div className="mb-4">
               <p className="font-semibold min-h-10">{product.brand_name || product.brand}</p>
-              <p className="font-semibold min-h-10">{product.sub_category_name}</p>
               <p className="text-lg xs:text-xl font-light line-clamp-2 min-h-14">
                 {product.product_name || product.title}
               </p>

@@ -11,7 +11,6 @@ export default function ProductFilters({
   onFiltersChange,
   onBrandFiltersChange,
   onCategoryFiltersChange,
-  onSubCategoryFiltersChange,
   onSizeFilterChange,
   onSkinTypeFilterChange,
   onColorFilterChange,
@@ -39,7 +38,6 @@ export default function ProductFilters({
 
   const [menu, setMenu] = useState({
     categories: [],
-    sub_categories: [],
     brands: [],
     sizes: [],
     colors: [],
@@ -47,38 +45,19 @@ export default function ProductFilters({
   });
   const [loading, setLoading] = useState(true);
 
-  // const [subCategoryData, setSubCategoryData] = useState<string[]>([]);
-  const [categoryIdFilters, setCategoryIdFilters] = useState<string[]>([]);
-
-  const [subCategoryFilters, setSubCategoryFilters] = useState<string[]>([]);
-  const [subCategoryIdFilters, setSubCategoryIdFilters] = useState<string[]>([]);
-
-
   useEffect(() => {
     const getCategories = async () => {
-      setLoading(true);
-      try {
-        const categoriesData = await fetchProductPageTopMenu(
-          brandFilters,
-          categoryFilters,
-          categoryIdFilters,
-          subCategoryIdFilters
-        );
-        console.log("categoriesDataall", categoriesData);
+      const categoriesData = await fetchProductPageTopMenu(
+        brandFilters,
+        categoryFilters
+      );
 
-        setMenu(categoriesData);
-
-      } catch (error) {
-        console.log("error", error);
-
-      } finally {
-        setLoading(false);
-      }
-
+      setMenu(categoriesData);
+      setLoading(false);
     };
 
     getCategories();
-  }, [brandFilters, categoryFilters, categoryIdFilters, subCategoryIdFilters]);
+  }, [brandFilters, categoryFilters]);
 
   //example data
   const filterOptions = {
@@ -91,7 +70,7 @@ export default function ProductFilters({
     setActiveDropdown((prev) => (prev === filterName ? null : filterName));
   };
 
-  const handleAddFilter = (filter: string, type: string, id: string) => {
+  const handleAddFilter = (filter: string, type: string) => {
     if (!filters.includes(filter)) {
       const updatedFilters = [...filters, filter];
       setFilters(updatedFilters);
@@ -112,17 +91,9 @@ export default function ProductFilters({
         const updatedColorFilters = [...colorFilters, filter];
         setColorFilters(updatedColorFilters);
         onColorFilterChange(updatedColorFilters);
-      } else if (type === "subCategory") {
-        const updatedSubCategoryFilters = [...subCategoryFilters, id];
-        const updatedSubCategoryIdFilters = [...subCategoryIdFilters, id];
-        setSubCategoryFilters(updatedSubCategoryFilters);
-        setSubCategoryIdFilters(updatedSubCategoryIdFilters);
-        onSubCategoryFiltersChange(updatedSubCategoryFilters);
       } else {
         const updatedCategoryFilters = [...categoryFilters, filter];
-        const updatedCategoryIdFilters = [...categoryIdFilters, id];
         setCategoryFilters(updatedCategoryFilters);
-        setCategoryIdFilters(updatedCategoryIdFilters);
         onCategoryFiltersChange(updatedCategoryFilters);
       }
     }
@@ -161,25 +132,6 @@ export default function ProductFilters({
     );
     setCategoryFilters(updatedCategoryFilters);
     onCategoryFiltersChange(updatedCategoryFilters);
-
-    // Remove the filter from the category filters
-
-    const foundCategory: any = menu?.sub_categories.find(
-      (item: any) => item?.category_name === filter
-    );
-
-    const categoryId = foundCategory ? foundCategory._id : null;
-
-    const updatedSubCategoryFilters = subCategoryFilters.filter(
-      (item) => item !== categoryId
-    );
-    const updatedSubCategoryIdFilters = subCategoryIdFilters.filter(
-      (item) => item !== categoryId
-    );
-
-    setSubCategoryFilters(updatedSubCategoryFilters);
-    setSubCategoryIdFilters(updatedSubCategoryIdFilters);
-    onSubCategoryFiltersChange(updatedSubCategoryFilters);
   };
 
   const handleClearFilters = () => {
@@ -195,9 +147,6 @@ export default function ProductFilters({
     onSkinTypeFilterChange([]);
     onColorFilterChange([]);
     onCategoryFiltersChange([]);
-    setSubCategoryFilters([]);
-    setSubCategoryIdFilters([]);
-    onSubCategoryFiltersChange([]);
   };
   //console.log("selectedMainCategory", type);
 
@@ -210,10 +159,10 @@ export default function ProductFilters({
             {type === "dibi-milano"
               ? "DIBI Milano"
               : type
-                ? type
-                : selectedMainCategory
-                  ? selectedMainCategory
-                  : "Alle produkter"}
+              ? type
+              : selectedMainCategory
+              ? selectedMainCategory
+              : "Alle produkter"}
           </h2>
           {brandDetail?.comments && (
             <p className="pt-2 text-center mx-auto max-w-2xl">
@@ -230,30 +179,26 @@ export default function ProductFilters({
       </div>
       <div className="flex flex-wrap py-5 mb-0 xl:mb-0 border-b border-black border-opacity-10">
         {/* categories */}
-        {loading ? <div className="w-full sm:w-1/3 lg:w-1/5 py-2 sm:px-3">
-          <div className="animate-pulse">
-            <div className="h-12 rounded-full bg-gray-200"></div>
-          </div>
-        </div> :
-          menu?.categories?.length > 0 && (
-            <div
-              className="w-full sm:w-1/3 lg:w-1/5 py-2 sm:px-3 relative"
+        {menu?.categories?.length > 0 && (
+          <div
+            className="w-full sm:w-1/3 lg:w-1/5 py-2 sm:px-3 relative"
             // ref={dropdownRef}
+          >
+            <div
+              className="flex justify-between items-center cursor-pointer py-5 px-4 xl:px-8 font-heading font-medium border border-gray-200 hover:border-gray-300 rounded-full bg-white"
+              onClick={() => handleDropdownToggle("Kategori")}
             >
-              <div
-                className="flex justify-between items-center cursor-pointer py-5 px-4 xl:px-8 font-heading font-medium border border-gray-200 hover:border-gray-300 rounded-full bg-white"
-                onClick={() => handleDropdownToggle("Kategori")}
-              >
-                <span>Kategori</span>
-                <BiChevronDown
-                  size={20}
-                  className={`transition-transform ${activeDropdown === "Kategori" ? "rotate-180" : "rotate-0"
-                    }`}
-                />
-              </div>
+              <span>Kategori</span>
+              <BiChevronDown
+                size={20}
+                className={`transition-transform ${
+                  activeDropdown === "Kategori" ? "rotate-180" : "rotate-0"
+                }`}
+              />
+            </div>
 
-              {/* Dropdown Menu */}
-              {/* {activeDropdown === 'Kategori' && (
+            {/* Dropdown Menu */}
+            {/* {activeDropdown === 'Kategori' && (
             <ul className="absolute left-0 mt-2 w-full max-w-md bg-white border border-gray-200 shadow-lg rounded-lg z-10">
               {menu.categories.map((option: any, index) => (
                 <li
@@ -269,86 +214,37 @@ export default function ProductFilters({
               ))}
             </ul>
           )} */}
-              {activeDropdown === "Kategori" && (
-                <ul className="absolute left-0 mt-2 w-full max-w-md bg-white border border-gray-200 shadow-lg rounded-lg z-10">
-                  {menu.categories.map((option: any, index) => {
-                    const isSelected = filters.includes(option.category_name);
-                    return (
-                      option.total_products > 0 && (
-                        <li
-                          key={index}
-                          className={`px-4 py-2 cursor-pointer hover:bg-gray-100 border-b border-tertiary/50 ${isSelected ? "cursor-not-allowed text-gray-400" : ""
-                            }`}
-                          onClick={() => {
-                            if (!isSelected) {
-                              handleAddFilter(option.category_name, "category", option._id);
-                              setActiveDropdown(null);
-                            }
-                          }}
-                        >
-                          {option.category_name + "(" + option.total_products + ")"}
-                        </li>)
-                    );
-                  })}
-                </ul>
-              )}
-            </div>
-          )}
-        {/* sub categories */}
-        {loading ? <div className="w-full sm:w-1/3 lg:w-1/5 py-2 sm:px-3">
-          <div className="animate-pulse">
-            <div className="h-12 rounded-full bg-gray-200"></div>
-          </div>
-        </div> : menu?.sub_categories?.length > 0 &&
-        <div
-          className="w-full sm:w-1/3 lg:w-1/5 py-2 sm:px-3 relative"
-        // ref={dropdownRef}
-        >
-          <div
-            className="flex justify-between items-center cursor-pointer py-5 px-4 xl:px-8 font-heading font-medium border border-gray-200 hover:border-gray-300 rounded-full bg-white"
-            onClick={() => handleDropdownToggle('SubKategori')}
-          >
-            <span>Underkategori</span>
-            <BiChevronDown
-              size={20}
-              className={`transition-transform ${activeDropdown === 'SubKategori' ? "rotate-180" : "rotate-0"
-                }`}
-            />
-          </div>
-
-          {activeDropdown === 'SubKategori' && (
-            <ul className="absolute left-0 mt-2 w-full max-w-md bg-white border border-gray-200 shadow-lg rounded-lg z-10">
-              {menu?.sub_categories?.map((option: any, index) => {
-                const isSelected = filters.includes(option.category_name);
-                return (
-                  <li
-                    key={index}
-                    className={`px-4 py-2 cursor-pointer hover:bg-gray-100 border-b border-tertiary/50 ${isSelected ? 'cursor-not-allowed text-gray-400' : ''
+            {activeDropdown === "Kategori" && (
+              <ul className="absolute left-0 mt-2 w-full max-w-md bg-white border border-gray-200 shadow-lg rounded-lg z-10">
+                {menu.categories.map((option: any, index) => {
+                  const isSelected = filters.includes(option.category_name);
+                  return (
+                    option.total_products > 0 && (
+                    <li
+                      key={index}
+                      className={`px-4 py-2 cursor-pointer hover:bg-gray-100 border-b border-tertiary/50 ${
+                        isSelected ? "cursor-not-allowed text-gray-400" : ""
                       }`}
-                    onClick={() => {
-                      if (!isSelected) {
-                        handleAddFilter(option.category_name, 'subCategory', option._id);
-                        setActiveDropdown(null);
-                      }
-                    }}
-                  >
-                    {option.category_name + " (" + option?.category?.category_name + ")"}
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-        </div>
-        }
-        {/* brands */}
-        {loading ? <div className="w-full sm:w-1/3 lg:w-1/5 py-2 sm:px-3">
-          <div className="animate-pulse">
-            <div className="h-12 rounded-full bg-gray-200"></div>
+                      onClick={() => {
+                        if (!isSelected) {
+                          handleAddFilter(option.category_name, "category");
+                          setActiveDropdown(null);
+                        }
+                      }}
+                    >
+                      {option.category_name + "(" + option.total_products + ")"}
+                    </li>)
+                  );
+                })}
+              </ul>
+            )}
           </div>
-        </div> : menu?.brands?.length > 0 && (
+        )}
+        {/* brands */}
+        {menu?.brands?.length > 0 && (
           <div
             className="w-full sm:w-1/3 lg:w-1/5 py-2 sm:px-3 relative"
-          // ref={dropdownRef}
+            // ref={dropdownRef}
           >
             <div
               className="flex justify-between items-center cursor-pointer py-5 px-4 xl:px-8 font-heading font-medium border border-gray-200 hover:border-gray-300 rounded-full bg-white"
@@ -357,8 +253,9 @@ export default function ProductFilters({
               <span>Merker</span>
               <BiChevronDown
                 size={20}
-                className={`transition-transform ${activeDropdown === "Merker" ? "rotate-180" : "rotate-0"
-                  }`}
+                className={`transition-transform ${
+                  activeDropdown === "Merker" ? "rotate-180" : "rotate-0"
+                }`}
               />
             </div>
 
@@ -386,18 +283,19 @@ export default function ProductFilters({
                   return (
                     option.total_products > 0 && (
                       <li
-                        key={index}
-                        className={`px-4 py-2 cursor-pointer hover:bg-gray-100 border-b border-tertiary/50 ${isSelected ? "cursor-not-allowed text-gray-400" : ""
-                          }`}
-                        onClick={() => {
-                          if (!isSelected) {
-                            handleAddFilter(option.brand_name, "brand", option._id);
-                            setActiveDropdown(null);
-                          }
-                        }}
-                      >
-                        {option.brand_name}
-                      </li>
+                      key={index}
+                      className={`px-4 py-2 cursor-pointer hover:bg-gray-100 border-b border-tertiary/50 ${
+                        isSelected ? "cursor-not-allowed text-gray-400" : ""
+                      }`}
+                      onClick={() => {
+                        if (!isSelected) {
+                          handleAddFilter(option.brand_name, "brand");
+                          setActiveDropdown(null);
+                        }
+                      }}
+                    >
+                      {option.brand_name}
+                    </li>
                     )
                   );
                 })}
@@ -406,11 +304,7 @@ export default function ProductFilters({
           </div>
         )}
 
-        {loading ? <div className="w-full sm:w-1/3 lg:w-1/5 py-2 sm:px-3">
-          <div className="animate-pulse">
-            <div className="h-12 rounded-full bg-gray-200"></div>
-          </div>
-        </div> : Object.entries(filterOptions).map(
+        {Object.entries(filterOptions).map(
           ([filterName, options]) =>
             options?.length > 0 && (
               <div
@@ -424,8 +318,9 @@ export default function ProductFilters({
                   <span>{filterName}</span>
                   <BiChevronDown
                     size={20}
-                    className={`transition-transform ${activeDropdown === filterName ? "rotate-180" : "rotate-0"
-                      }`}
+                    className={`transition-transform ${
+                      activeDropdown === filterName ? "rotate-180" : "rotate-0"
+                    }`}
                   />
                 </div>
 
@@ -437,11 +332,12 @@ export default function ProductFilters({
                       return (
                         <li
                           key={index}
-                          className={`px-4 py-2 cursor-pointer hover:bg-gray-100 border-b border-tertiary/50 ${isSelected ? "cursor-not-allowed text-gray-400" : ""
-                            }`}
+                          className={`px-4 py-2 cursor-pointer hover:bg-gray-100 border-b border-tertiary/50 ${
+                            isSelected ? "cursor-not-allowed text-gray-400" : ""
+                          }`}
                           onClick={() => {
                             if (!isSelected) {
-                              handleAddFilter(option.title, filterName, option._id);
+                              handleAddFilter(option.title, filterName);
                               setActiveDropdown(null);
                             }
                           }}

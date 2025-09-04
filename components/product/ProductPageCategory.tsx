@@ -16,6 +16,7 @@ const ProductPageCategory = ({
 
     const brandSlug = params.category.length > 0 ? params.category[params.category.length - 1] : params.pageType;
     
+
     let categoryBy = 'category';
     let mainCategory = '';
     let subCategory = '';

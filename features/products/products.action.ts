@@ -12,8 +12,7 @@ export async function fetchProducts(
   colorFilters: any = null,
   type: any = null,
   mainCategoryFilters: any = null,
-  brandSlug: any = null,
-  subCategoryFilters: any = null
+  brandSlug: any = null
 ) {
   try {
     const session = await auth();
@@ -54,10 +53,7 @@ export async function fetchProducts(
     if (mainCategoryFilters && mainCategoryFilters.length > 0) {
       url += `&mainCategoryFilters=${mainCategoryFilters}`;
     }
-    if (subCategoryFilters && subCategoryFilters.length > 0) {
-      url += `&subCategory=${subCategoryFilters}`;
-    }
-    console.log("all-product-api", url);
+    //console.log("url", url);
     // Sending GET request to fetch products
     const res = await axios.get(url, { headers });
 
@@ -130,7 +126,7 @@ export async function fetchProductsWithCategory(
     if (childSubCategory) {
       url += `&childSubCategory=${childSubCategory}`;
     }
-    console.log("urllllll", url);
+    //console.log("urllllll", url);
 
     // Sending GET request to fetch products
     const res = await axios.get(url, { headers });
