@@ -33,78 +33,78 @@ export async function generateMetadata({ params }: { params: { slug: string[] } 
 }
 
 export default async function ProductPage({ params }: { params: { slug: string[] } }) {
-  // const { slug } = params;
+  const { slug } = params;
   // const cartItem = await fetchCartItems();
   // const customerGroups = await fetchCustomerGroup();
-  // const products = await fetchProductDetail(slug);
-  // console.log("productttttt", products);
+  const products = await fetchProductDetail(slug);
+  console.log("productttttt", products);
   
   
-  // let breadcrumbs: any = [];
+  let breadcrumbs: any = [];
 
-  // if (products?.category) {
-  //   breadcrumbs = [
-  //     {
-  //       id: 1,
-  //       text: products?.category?.category_name,
-  //       link: `/kategori/${products?.category?.slug}`,
-  //     },
-  //     {
-  //       id: 2,
-  //       text: "",
-  //       link: "",
-  //     },
-  //   ];
-  // }
+  if (products?.category) {
+    breadcrumbs = [
+      {
+        id: 1,
+        text: products?.category?.category_name,
+        link: `/kategori/${products?.category?.slug}`,
+      },
+      {
+        id: 2,
+        text: "",
+        link: "",
+      },
+    ];
+  }
 
-  // if (products?.sub_category) {
-  //   breadcrumbs = [
-  //     {
-  //       id: 1,
-  //       text: products?.category?.category_name,
-  //       link: `/kategori/${products?.category?.slug}`,
-  //     },
-  //     {
-  //       id: 2,
-  //       text: products?.sub_category?.category_name,
-  //       link: `/kategori/${products?.category?.slug}/${products?.sub_category?.slug}`,
-  //     },
-  //     {
-  //       id: 3,
-  //       text: "",
-  //       link: "",
-  //     },
-  //   ];
-  // }
+  if (products?.sub_category) {
+    breadcrumbs = [
+      {
+        id: 1,
+        text: products?.category?.category_name,
+        link: `/kategori/${products?.category?.slug}`,
+      },
+      {
+        id: 2,
+        text: products?.sub_category?.category_name,
+        link: `/kategori/${products?.category?.slug}/${products?.sub_category?.slug}`,
+      },
+      {
+        id: 3,
+        text: "",
+        link: "",
+      },
+    ];
+  }
 
-  // if (products?.child_sub_category) {
-  //   breadcrumbs = [
-  //     {
-  //       id: 1,
-  //       text: products?.category?.category_name,
-  //       link: `/kategori/${products?.category?.slug}`,
-  //     },
-  //     {
-  //       id: 2,
-  //       text: products?.sub_category?.category_name,
-  //       link: `/kategori/${products?.category?.slug}/${products?.sub_category?.slug}`,
-  //     },
-  //     {
-  //       id: 3,
-  //       text: products?.child_sub_category?.category_name,
-  //       link: `/kategori/${products?.category?.slug}/${products?.sub_category?.slug}/${products?.child_sub_category?.slug}`,
-  //     },
-  //     {
-  //       id: 4,
-  //       text: "",
-  //       link: "",
-  //     },
-  //   ];
-  // }
+  if (products?.child_sub_category) {
+    breadcrumbs = [
+      {
+        id: 1,
+        text: products?.category?.category_name,
+        link: `/kategori/${products?.category?.slug}`,
+      },
+      {
+        id: 2,
+        text: products?.sub_category?.category_name,
+        link: `/kategori/${products?.category?.slug}/${products?.sub_category?.slug}`,
+      },
+      {
+        id: 3,
+        text: products?.child_sub_category?.category_name,
+        link: `/kategori/${products?.category?.slug}/${products?.sub_category?.slug}/${products?.child_sub_category?.slug}`,
+      },
+      {
+        id: 4,
+        text: "",
+        link: "",
+      },
+    ];
+  }
 
   return (
     <>
-      {/* {products === 404 ? <h5>404</h5> :
+     {products === 404 ? <h5>404</h5> :
         <section className="pt-6 pb-24 px-2 md:px-6 w-full bg-background">
           <div className="container2 mx-auto w-full flex gap-2 p-2 sm:p-4">
             <Breadcrumbs items={breadcrumbs} />
@@ -127,11 +127,11 @@ export default async function ProductPage({ params }: { params: { slug: string[]
                 <h2 className="font-heading font-light text-2xl sm:text-2xl md:text-3xl lg:text-5xl mb-8 max-w-2xl">
                   {products.product_name}
                 </h2>
-                <ProductDetailPrice
+                {/* <ProductDetailPrice
                   initialVariant={products?.variants?.length > 0 ? products?.variants[0] : null}
                   detail={products}
                   customerGroups={customerGroups}
-                />
+                /> */}
 
                 {products?.variants?.length > 0 &&
                   <div className="flex flex-wrap gap-6 items-center mb-8">
@@ -141,10 +141,10 @@ export default async function ProductPage({ params }: { params: { slug: string[]
                   </div>
                 }
 
-                <AddToCartButton cart={cartItem.find((cart:any) => cart.product_id === products.product_id) ?? null} product={products}
+                {/* <AddToCartButton cart={cartItem.find((cart:any) => cart.product_id === products.product_id) ?? null} product={products}
                 
                 
-                />
+                /> */}
 
                 <div className="mt-10">
                   <p className="text-gray-500 text-base md:text-lg lg:text-xl font-base mb-8 max-w-2xl">
@@ -154,12 +154,11 @@ export default async function ProductPage({ params }: { params: { slug: string[]
               </div>
             </div>
           </div>
-          {products?.realetedProducts?.length > 0 &&
+          {/* {products?.realetedProducts?.length > 0 &&
             <RelatedProducts cartItem={cartItem} products={products.realetedProducts} customerGroups={customerGroups} />
-          }
+          } */}
         </section>
-      } */}
-      <h5>Under Maintenance</h5>
+      } 
     </>
   );
 };
