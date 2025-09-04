@@ -21,7 +21,7 @@ const ProductCard = ({
   };
   onClose: () => void;
 }) => (
-  <Link
+  <a
     href={`/produkt/${product.slug}`}
     className="border flex flex-row items-center border-gray-200 rounded-lg p-4 hover:shadow-md transition"
   >
@@ -39,15 +39,15 @@ const ProductCard = ({
       </div>
     </div>
     <div className="w-auto">
-      <Link
+      <a
         href={`/produkt/${product.slug}`}
         onClick={onClose}
         className="bg-primary text-white rounded-full px-4 py-2 whitespace-nowrap inline-block"
       >
         Se mer
-      </Link>
+      </a>
     </div>
-  </Link>
+  </a>
 );
 
 const SearchModal = ({ isOpenSearch, searchOff }: any) => {
