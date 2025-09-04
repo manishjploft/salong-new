@@ -1,7 +1,7 @@
 import React from "react";
 import ProductCard from "./ProductCard";
 
-export default async function RelatedProducts({
+export default function RelatedProducts({
   cartItem,
   products,
   customerGroups,

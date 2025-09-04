@@ -1,30 +1,12 @@
 "use client";
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import dynamic from "next/dynamic";
-import useProductDetailStore from "../store";
-
-// Dynamically import Swiper to reduce initial bundle size
-const Swiper = dynamic(() => import("swiper/react").then(module => module.Swiper), {
-  ssr: false,
-  loading: () => (
-    <div className="flex gap-2">
-      {[1, 2, 3].map((i) => (
-        <div key={i} className="w-20 h-20 bg-gray-200 rounded-lg animate-pulse"></div>
-      ))}
-    </div>
-  ),
-});
-
-const SwiperSlide = dynamic(() => import("swiper/react").then(module => module.SwiperSlide), {
-  ssr: false,
-});
-
-// Import Swiper styles
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { Autoplay } from "swiper/modules";
+import useProductDetailStore from "../store";
 
 interface ProductGalleryProps {
   products: any;
@@ -37,26 +19,25 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({
   images,
   mainImage,
 }) => {
-  const [selectedImage, setSelectedImage] = useState<string>(mainImage);
+  const [selectedImage, setSelectedImage] = useState<any>();
   const selectedVariant = useProductDetailStore(
     (state) => state.selectedVariant
   );
+  //console.log("selectedVariant", selectedVariant);
+  console.log("selectedImage", products?.product_id);
   
   const clearSelectedVariant = useProductDetailStore((state) => state.clearSelectedVariant);
 
-  // When product changes, clear the selected variant
-  useEffect(() => {
-    clearSelectedVariant();
-  }, [products?.product_id, clearSelectedVariant]);
+// When product changes, clear the selected variant
+useEffect(() => {
+  clearSelectedVariant();
+}, [products?.product_id]); // or `product.slug`, based on your data
   
-  // Memoize the current image to prevent unnecessary re-renders
-  const currentImage = useMemo(() => {
-    return selectedVariant ? selectedVariant?.product_image || mainImage : mainImage;
-  }, [selectedVariant, mainImage]);
-
   useEffect(() => {
-    setSelectedImage(currentImage);
-  }, [currentImage]);
+    setSelectedImage(
+      selectedVariant ? selectedVariant?.product_image || mainImage : mainImage
+    );
+  }, [selectedVariant, mainImage, products?.product_id]);
 
   const handleImageClick = (image: string) => {
     setSelectedImage(image);
@@ -67,13 +48,12 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({
       <div className="group pb-10">
         <div className="relative w-full h-auto rounded-xl transition duration-200 mb-4">
           <div className="w-full h-full relative aspect-square overflow-hidden">
-            <Image
+            <img
               className="absolute inset-0 rounded-xl aspect-square w-full object-contain transform group-hover:scale-105 transition duration-200"
               src={selectedImage}
-              alt={products?.product_name || 'Product image'}
-              fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 50vw"
-              priority
+              alt={products?.product_name}
+              height={700}
+              width={700}
             />
             {products.special_price && (
               <>
@@ -90,7 +70,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({
           <div className="flex flex-nowrap items-center justify-center gap-2 sm:gap-4 md:gap-8">
             <div className="slider-prod">
               <Swiper
-                modules={[Autoplay]}
+                modules={[Autoplay]} // Removed Pagination
                 slidesPerView={3}
                 autoplay={{ delay: 3000 }}
                 breakpoints={{
@@ -108,17 +88,14 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({
                 <SwiperSlide>
                   <span
                     onClick={() => handleImageClick(mainImage)}
-                    className="group cursor-pointer"
+                    className="group"
                   >
                     <div className="relative overflow-hidden border">
-                      <Image
-                        className="inset-0 rounded-lg w-full h-full object-cover transform group-hover:scale-105 transition duration-200"
+                      <img
+                        className=" inset-0 rounded-lg w-full h-full object-cover transform group-hover:scale-105 transition duration-200 mobileimg"
                         style={{ height: "150px" }}
                         src={mainImage}
-                        alt="Main Thumbnail"
-                        width={150}
-                        height={150}
-                        loading="lazy"
+                        alt={`Main Thumbnail`}
                       />
                     </div>
                   </span>
@@ -127,17 +104,14 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({
                   <SwiperSlide key={i}>
                     <span
                       onClick={() => handleImageClick(item.product_thumb_small)}
-                      className="group cursor-pointer"
+                      className="group"
                     >
                       <div className="relative overflow-hidden border">
-                        <Image
-                          className="inset-0 rounded-lg w-full h-full object-cover transform group-hover:scale-105 transition duration-200"
+                        <img
+                          className=" inset-0 rounded-lg w-full h-full object-cover transform group-hover:scale-105 transition duration-200 mobileimg"
                           src={item.product_thumb_small}
                           style={{ height: "150px" }}
                           alt={`Thumbnail ${i + 1}`}
-                          width={150}
-                          height={150}
-                          loading="lazy"
                         />
                       </div>
                     </span>
